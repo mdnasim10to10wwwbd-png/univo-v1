@@ -61,22 +61,23 @@ button,input,textarea{font:inherit}button{cursor:pointer}
     <button onclick="show('profile',this)"><b>●</b>Profile</button>
   </nav>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-const SUPABASE_URL="https://rqyuanelxktbhsdgnedm.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY="Sb_publishable_pt8orLHRoomSJzn1KLOx1Q_lxpN4Zuv";
-const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_PUBLISHABLE_KEY);
-async function signIn(){const email=document.getElementById('email').value.trim(),password=document.getElementById('pass').value;if(!email||!password)return alert('Email and password দিন।');const {error}=await sb.auth.signInWithPassword({email,password});if(error)return alert(error.message);openApp()}
-async function signUp(){const email=document.getElementById('email').value.trim(),password=document.getElementById('pass').value;if(!email||!password)return alert('Email and password দিন।');if(password.length<6)return alert('Password কমপক্ষে ৬ অক্ষরের দিন।');const {data,error}=await sb.auth.signUp({email,password});if(error)return alert(error.message);if(data.session)openApp();else alert('Account তৈরি হয়েছে। Email verification চালু থাকলে email verify করে তারপর Sign In করুন।')}
+const SUPABASE_URL = "https://rqyuanelxktbhsdgnedm.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_pt8orLHRoomSJzn1KLOx1Q_lxpN4Zuv";
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY);
+async function signIn(){const email=document.getElementById('email').value.trim(),password=document.getElementById('pass').value;if(!email||!password)return alert('Email and password দিন।');const{error}=await sb.auth.signInWithPassword({email,password});if(error)return alert(error.message);openApp()}
+async function signUp(){const email=document.getElementById('email').value.trim(),password=document.getElementById('pass').value;if(!email||!password)return alert('Email and password দিন।');if(password.length<6)return alert('Password কমপক্ষে ৬ অক্ষরের দিন।');const{data,error}=await sb.auth.signUp({email,password});if(error)return alert(error.message);if(data.session)openApp();else alert('Account তৈরি হয়েছে। Email verification চালু থাকলে email verify করে Sign In করুন।')}
 function openApp(){document.getElementById('auth').classList.add('hidden');document.getElementById('main').classList.remove('hidden');document.getElementById('nav').classList.remove('hidden');render()}
-async function checkSession(){const {data}=await sb.auth.getSession();if(data.session)openApp()}
-async function logout(){await sb.auth.signOut();location.reload()}
+async function checkSession(){const{data}=await sb.auth.getSession();if(data.session)openApp()}
 document.addEventListener('DOMContentLoaded',checkSession);
 </script>
+
 <script>
 const posts=JSON.parse(localStorage.getItem('univo_posts')||'[]');
-function login(){signIn()}
-function demoSignup(){signUp()}
+function login(){document.getElementById('auth').classList.add('hidden');document.getElementById('main').classList.remove('hidden');document.getElementById('nav').classList.remove('hidden');render();}
+function demoSignup(){alert('V1 demo signup: your account UI is ready. Real secure authentication will be connected with Supabase in the next stage.');}
 function show(id,btn){document.querySelectorAll('#main section').forEach(x=>x.classList.add('hidden'));document.getElementById(id).classList.remove('hidden');document.querySelectorAll('.nav button').forEach(x=>x.classList.remove('active'));if(btn)btn.classList.add('active');}
 function like(b){b.classList.toggle('active');b.textContent=b.classList.contains('active')?'♥ Liked':'♡ Like'}
 function addPost(){const v=document.getElementById('newpost').value.trim();if(!v)return;posts.unshift({text:v,time:'now'});localStorage.setItem('univo_posts',JSON.stringify(posts));document.getElementById('newpost').value='';render();}
